@@ -5,6 +5,7 @@ pipeline {
         IMAGE_TAG = "v${BUILD_NUMBER}"
         AWS_REGION = "us-east-1"
         ECR_REPO = "851725352687.dkr.ecr.us-east-1.amazonaws.com/my-flask-app"
+        KUBE_DEPLOYMENT_FILE = "deployment.yml"
     }
     
     stages {
@@ -25,14 +26,19 @@ pipeline {
                 }
             }
         }         
-
         stage('Deploy to EKS') {
             steps {
                 script {
-                    sh 'kubectl apply -f deployment.yml'
+
+                    sh '''
+                        echo "Updating Kubernetes deployment file..."
+                        sed -i "s|image: .*|image: ${ECR_REPO}/${IMAGE_NAME}:${IMAGE_TAG}|" ${KUBE_DEPLOYMENT_FILE}
+
+                        echo "Applying Kubernetes deployment..."
+                        kubectl apply -f ${KUBE_DEPLOYMENT_FILE}
+                    '''
                 }
             }
         }
     }
 }
-
