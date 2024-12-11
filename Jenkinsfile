@@ -32,7 +32,7 @@ pipeline {
 
                     sh '''
                         echo "Updating Kubernetes deployment file..."
-                        sed -i "s|image: .*|image: ${ECR_REPO}/${IMAGE_NAME}:${IMAGE_TAG}|" ${KUBE_DEPLOYMENT_FILE}
+                        sed -i "s|image: .*|image: ${ECR_REPO}:${IMAGE_TAG}|" ${KUBE_DEPLOYMENT_FILE}
 
                         echo "Applying Kubernetes deployment..."
                         kubectl apply -f ${KUBE_DEPLOYMENT_FILE}
