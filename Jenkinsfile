@@ -41,4 +41,11 @@ pipeline {
             }
         }
     }
+post {
+        always {
+            mail to: 'salimovanusher6@gmail.com',
+               subject: 'Jenkins Build Notification',
+               body: "Build ${env.BUILD_NUMBER} ${currentBuild.result}"
+        }
+    }    
 }
