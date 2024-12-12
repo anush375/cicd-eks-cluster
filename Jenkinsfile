@@ -41,11 +41,17 @@ pipeline {
             }
         }
     }
-post {
-        always {
+
+ post {
+        failure {
             mail to: 'salimovanusher6@gmail.com',
-               subject: 'Jenkins Build Notification',
-               body: "Build ${env.BUILD_NUMBER} ${currentBuild.result}"
+                 subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The build ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.\nCheck it here: ${env.BUILD_URL}"
         }
-    }    
+        success {
+            mail to: 'salimovanusher6@gmail.com',
+                 subject: "Jenkins Build Succeed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The build ${env.JOB_NAME} #${env.BUILD_NUMBER} succeed.\nCheck it here: ${env.BUILD_URL}"
+        }
+    }
 }
